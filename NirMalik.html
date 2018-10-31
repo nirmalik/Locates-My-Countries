@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Countries Info Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+    <style>
+        .country {
+            margin-top: 20px;
+        }
+
+        .flag {
+            width: 100%;
+            max-height: 150px;
+            box-shadow: 1px 1px 1px rgb(224, 13, 13);
+        }
+
+        .cont-left {
+            width: 35%;
+            float: left;
+            padding-right: 2%;
+        }
+
+        .cont-right {
+            width: 50%;
+            float: left;
+            border-left: 1px solid rgb(4, 20, 243);
+            padding-left: 2%;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 0.3rem;
+        }
+
+        #showAll {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Countries Info by Nir Malik</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Find a Country</label>
+                        <input type="text" class="form-control" id="countryInput" placeholder="Enter Country">
+                    </div>
+                    <button type="button" id="submitCountry" class="btn btn-primary">Send !</button>
+                </form>
+                <button type="button" id="showAll" class="btn btn-primary euro-btn">Show All !</button>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <div class="row" id="therow"> </div>
+    </div>
+
+    <script>
+        $(function () {
+            var $therow = $('#therow');
+
+            $.ajax({
+                type: 'get',
+                url: 'https://restcountries.eu/rest/v2/all',
+                success: function (countries) {
+                    $.each(countries, function (i, country) {
+                        $therow.append("<div class='col-md-4 country' id='" + i + "'><div class='card'><div class='card-header'><h3 class='card-title'>" + country.name + "</h3></div><div class='card-body'><div class='cont-left'><img class='flag' src=" + country.flag + "></div><div class='cont-right'><p>Top Level Domain: <strong>" + country.topLevelDomain[0] + "</strong></p><p>Capital: <strong>" + country.capital + "</strong></p><p>Currencies: <br>Code: <strong>" + country.currencies[0].code + "</strong><br>Name: <strong>" + country.currencies[0].name + "</strong><br>Symbol: <strong>" + country.currencies[0].symbol + "</strong></p></div></div></div></div>");
+                    });
+                }
+            });
+            $('#showAll').click(function () {
+                $.ajax({
+                    type: 'get',
+                    url: 'https://restcountries.eu/rest/v2/all',
+                    success: function (countries) {
+                        $.each(countries, function (i, country) {
+                            $('#' + i).show();
+                        });
+
+                    }
+                });
+            });
+            $('#submitCountry').click(function () {
+                $.ajax({
+                    type: 'get',
+                    url: 'https://restcountries.eu/rest/v2/all',
+                    success: function (countries) {
+                        $.each(countries, function (i, country) {
+                            var countryInput = $("#countryInput").val();
+                            var country = country.name;
+                            if (countryInput != country) {
+                                $('#' + i).hide();
+                            }
+                        });
+
+                    }
+                });
+            });
+            $('#submitCountry').click(function () {
+                $.ajax({
+                    type: 'get',
+                    url: 'https://restcountries.eu/rest/v2/all',
+                    success: function (countries) {
+                        $.each(countries, function (i, country) {
+                            var countryInput = $("#countryInput").val();
+                            var country = country.name;
+                            if (country == countryInput) {
+                                $('#' + i).show();
+                            } else {
+                                $('#' + i).hide();
+                            }
+                        });
+
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
